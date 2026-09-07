@@ -3,7 +3,6 @@ import { createContext, useContext } from 'react';
 export interface FavoritesContextType {
   favorites: number[];
   toggleFavorite: (id: number) => void;
-  isFavorite: (id: number) => boolean;
 }
 
 export const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);

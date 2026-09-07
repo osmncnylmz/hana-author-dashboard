@@ -12,7 +12,6 @@ export const Home = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
- 
     api.get('/users')
       .then(res => {
         setUsers(res.data);
@@ -25,16 +24,14 @@ export const Home = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  
+  // client-side filter - all ten users are already in memory and there is no paging to fight
   const filtered = users.filter(u => 
     u.name.toLowerCase().includes(search.toLowerCase()) ||
     u.company?.name.toLowerCase().includes(search.toLowerCase())
   );
 
-  
   if (loading) return <Loading />;
 
-  
   if (error) return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] p-6 text-center">
       <AlertCircle size={48} className="text-red-500 mb-4" />
@@ -52,7 +49,6 @@ export const Home = () => {
   return (
     <div className="min-h-screen bg-[#F8FAFC]">
       <div className="max-w-7xl mx-auto px-6 py-12">
-       
         <div className="text-center mb-16">
           <h2 className="text-4xl font-black text-slate-900 mb-4 tracking-tight">
             Yazar Kadromuz
@@ -60,8 +56,7 @@ export const Home = () => {
           <p className="text-slate-500 max-w-lg mx-auto mb-10 text-lg">
             Hana Travel içerik dünyasına yön veren profesyonel yazarlarımızı keşfedin.
           </p>
-          
-          
+
           <div className="relative max-w-xl mx-auto group">
             <Search className="absolute left-4 top-4 text-slate-400 group-focus-within:text-blue-500 transition-colors" size={24} />
             <input 
@@ -73,13 +68,11 @@ export const Home = () => {
           </div>
         </div>
 
-        
         {filtered.length === 0 ? (
           <div className="text-center py-20 text-slate-400">
             <p className="text-xl font-medium">"{search}" ile eşleşen bir yazar bulunamadı.</p>
           </div>
         ) : (
-         
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filtered.map(u => <UserCard key={u.id} user={u} />)}
           </div>

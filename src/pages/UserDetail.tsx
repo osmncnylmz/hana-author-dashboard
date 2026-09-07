@@ -15,7 +15,6 @@ export const UserDetail = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-   
     const fetchDetail = async () => {
       try {
         const [userRes, postsRes] = await Promise.all([
@@ -38,10 +37,11 @@ export const UserDetail = () => {
   const handleAdd = async (title: string, body: string) => {
     try {
       const res = await api.post('/posts', { title, body, userId: Number(id) });
-    
-      const newPost = { ...res.data, id: Date.now() }; 
+
+      // POST /posts answers with id 101 every time. It validates the payload and drops it.
+      // Date.now() only has to keep the keys apart until the next reload clears the list.
+      const newPost = { ...res.data, id: Date.now() };
       setPosts([newPost, ...posts]);
-      
     } catch (err) {
       console.error("Post eklenirken hata oluştu:", err);
       alert("Post eklenemedi.");
@@ -54,7 +54,6 @@ export const UserDetail = () => {
   return (
     <div className="min-h-screen bg-[#F8FAFC] py-8">
       <div className="max-w-4xl mx-auto p-6">
-    
         <button 
           onClick={() => navigate(-1)} 
           className="flex items-center text-slate-500 hover:text-blue-600 mb-8 font-semibold transition-colors group"
@@ -63,7 +62,6 @@ export const UserDetail = () => {
           Yazarlara Dön
         </button>
 
-       
         {user && (
           <div className="mb-10">
             <h1 className="text-4xl font-black text-slate-900 mb-2">{user.name}</h1>
@@ -76,18 +74,15 @@ export const UserDetail = () => {
           </div>
         )}
 
-       
         <div className="mb-12">
           <PostForm onSubmit={handleAdd} />
         </div>
 
-       
         <div className="flex items-center gap-2 mb-6 text-slate-800">
           <MessageSquare size={24} className="text-blue-500" />
           <h3 className="text-2xl font-bold">Yazılar</h3>
         </div>
 
-     
         <div className="space-y-6">
           {posts.length === 0 ? (
             <div className="bg-white p-10 rounded-3xl border border-dashed text-center text-slate-400">

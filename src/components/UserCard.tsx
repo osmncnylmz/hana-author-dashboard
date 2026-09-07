@@ -9,8 +9,7 @@ export const UserCard = ({ user }: { user: User }) => {
 
   return (
     <div className="group relative bg-white border border-slate-100 p-7 rounded-[32px] shadow-sm hover:shadow-[0_20px_50px_rgba(8,_112,_184,_0.08)] hover:-translate-y-1 transition-all duration-300 overflow-hidden">
-      
-      
+
       <button 
         onClick={() => toggleFavorite(user.id)} 
         className={`absolute top-6 right-6 p-2.5 rounded-2xl transition-all duration-300 ${
@@ -25,7 +24,6 @@ export const UserCard = ({ user }: { user: User }) => {
         />
       </button>
 
-      
       <div className="relative w-16 h-16 mb-6">
         <div className="absolute inset-0 bg-blue-600 opacity-10 rounded-2xl rotate-6 group-hover:rotate-12 transition-transform"></div>
         <div className="relative w-full h-full bg-blue-600 rounded-2xl flex items-center justify-center text-white shadow-lg shadow-blue-200">
@@ -33,7 +31,6 @@ export const UserCard = ({ user }: { user: User }) => {
         </div>
       </div>
 
-   
       <div className="mb-6">
         <h3 className="text-2xl font-black text-slate-800 tracking-tight mb-2 group-hover:text-blue-600 transition-colors">
           {user.name}
@@ -50,7 +47,6 @@ export const UserCard = ({ user }: { user: User }) => {
         </div>
       </div>
 
-      
       <div className="pt-6 border-t border-slate-50">
         <Link 
           to={`/user/${user.id}`} 
@@ -61,7 +57,6 @@ export const UserCard = ({ user }: { user: User }) => {
         </Link>
       </div>
 
-      
       <div className="absolute -bottom-10 -right-10 w-24 h-24 bg-blue-50 rounded-full opacity-50 group-hover:scale-150 transition-transform duration-700"></div>
     </div>
   );

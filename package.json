@@ -2,27 +2,12 @@
   "name": "hana-author-dashboard",
   "version": "0.1.0",
   "private": true,
-  "description": "React 19 + TypeScript dashboard that browses authors and their posts from the JSONPlaceholder demo API, with search and local favourites.",
-  "keywords": [
-    "react",
-    "typescript",
-    "vite",
-    "tailwindcss",
-    "react-router",
-    "axios",
-    "vitest",
-    "dashboard",
-    "jsonplaceholder"
-  ],
+  "description": "Frontend case study: authors and their posts from the JSONPlaceholder demo API, with search and local favorites.",
   "author": "Osman Can Yılmaz",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/osmncnylmz/hana-author-dashboard.git"
   },
-  "bugs": {
-    "url": "https://github.com/osmncnylmz/hana-author-dashboard/issues"
-  },
-  "homepage": "https://github.com/osmncnylmz/hana-author-dashboard#readme",
   "type": "module",
   "engines": {
     "node": ">=22.12"

@@ -7,11 +7,10 @@ import { useFavorites } from './favorites-context';
 const STORAGE_KEY = 'hana_author_favorites_v1';
 
 const Probe = () => {
-  const { favorites, toggleFavorite, isFavorite } = useFavorites();
+  const { favorites, toggleFavorite } = useFavorites();
   return (
     <div>
       <span data-testid="ids">{favorites.join(',')}</span>
-      <span data-testid="is-fav-1">{String(isFavorite(1))}</span>
       <button onClick={() => toggleFavorite(1)}>toggle-1</button>
       <button onClick={() => toggleFavorite(2)}>toggle-2</button>
     </div>
@@ -30,23 +29,20 @@ describe('FavoritesProvider', () => {
     renderProbe();
 
     expect(screen.getByTestId('ids')).toHaveTextContent('');
-    expect(screen.getByTestId('is-fav-1')).toHaveTextContent('false');
   });
 
-  it('adds an id on the first toggle and removes it on the second', async () => {
+  it('toggle adds, toggle again removes', async () => {
     const user = userEvent.setup();
     renderProbe();
 
     await user.click(screen.getByRole('button', { name: 'toggle-1' }));
     expect(screen.getByTestId('ids')).toHaveTextContent('1');
-    expect(screen.getByTestId('is-fav-1')).toHaveTextContent('true');
 
     await user.click(screen.getByRole('button', { name: 'toggle-1' }));
     expect(screen.getByTestId('ids')).toHaveTextContent('');
-    expect(screen.getByTestId('is-fav-1')).toHaveTextContent('false');
   });
 
-  it('persists the selection to localStorage', async () => {
+  it('persists to localStorage', async () => {
     const user = userEvent.setup();
     renderProbe();
 
@@ -62,10 +58,9 @@ describe('FavoritesProvider', () => {
     renderProbe();
 
     expect(screen.getByTestId('ids')).toHaveTextContent('1,7');
-    expect(screen.getByTestId('is-fav-1')).toHaveTextContent('true');
   });
 
-  it('falls back to an empty list when the stored value is not valid JSON', () => {
+  it('survives junk under the storage key', () => {
     localStorage.setItem(STORAGE_KEY, 'not-json');
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
 
@@ -76,16 +71,15 @@ describe('FavoritesProvider', () => {
     consoleError.mockRestore();
   });
 
-  it('falls back to an empty list when the stored value is valid JSON of the wrong shape', () => {
+  it('ignores valid JSON that is not an array', () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ a: 1 }));
 
     renderProbe();
 
     expect(screen.getByTestId('ids')).toHaveTextContent('');
-    expect(screen.getByTestId('is-fav-1')).toHaveTextContent('false');
   });
 
-  it('drops non-numeric entries from a stored array', () => {
+  it('drops non-numeric ids', () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify([1, 'two', null, 7]));
 
     renderProbe();
@@ -93,7 +87,7 @@ describe('FavoritesProvider', () => {
     expect(screen.getByTestId('ids')).toHaveTextContent('1,7');
   });
 
-  it('throws when useFavorites is used outside the provider', () => {
+  it('useFavorites outside the provider throws', () => {
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     expect(() => render(<Probe />)).toThrow(/FavoritesProvider/);

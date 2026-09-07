@@ -24,7 +24,7 @@ const renderCard = () =>
   );
 
 describe('UserCard', () => {
-  it('shows the author name, e-mail and company', () => {
+  it('renders name, email, company', () => {
     renderCard();
 
     expect(screen.getByRole('heading', { name: 'Clementine Bauch' })).toBeInTheDocument();
@@ -32,7 +32,7 @@ describe('UserCard', () => {
     expect(screen.getByText('Romaguera-Jacobson')).toBeInTheDocument();
   });
 
-  it('links to the detail route for that author', () => {
+  it('links to /user/:id', () => {
     renderCard();
 
     expect(screen.getByRole('link', { name: /Profili İncele/i })).toHaveAttribute(
@@ -41,7 +41,7 @@ describe('UserCard', () => {
     );
   });
 
-  it('writes the author id through to the favourites store when starred', async () => {
+  it('starring writes the id to storage', async () => {
     const person = userEvent.setup();
     renderCard();
 

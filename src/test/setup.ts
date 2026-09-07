@@ -1,15 +1,10 @@
 import '@testing-library/jest-dom/vitest';
 import { afterEach } from 'vitest';
 
-/**
- * A minimal, spec-shaped in-memory `Storage`.
- *
- * jsdom supplies its own `localStorage`, but Node >= 25 also defines a global
- * `localStorage` that is inert unless the process is started with
- * `--localstorage-file`, and that stub wins in the jsdom test environment.
- * Installing our own implementation keeps the favourites tests deterministic
- * across Node versions instead of depending on which one happens to be there.
- */
+// jsdom brings a localStorage, but Node >= 25 defines a global one too, and that one
+// is inert unless the process was started with --localstorage-file. Inside the jsdom
+// environment the inert stub is the one that wins, which turns every favorites test
+// into a coin flip on the Node version. So: our own Storage, and no surprises.
 class MemoryStorage implements Storage {
   #entries = new Map<string, string>();
 
@@ -52,8 +47,7 @@ for (const target of new Set<object>([globalThis, globalThis.window])) {
   }
 }
 
-// The favourites provider writes to localStorage, so every test starts from a
-// clean slate and the suite stays order-independent.
+// the provider writes on every change
 afterEach(() => {
   localStorage.clear();
 });

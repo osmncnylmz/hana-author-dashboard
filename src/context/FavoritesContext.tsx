@@ -4,14 +4,12 @@ import { FavoritesContext } from './favorites-context';
 const STORAGE_KEY = 'hana_author_favorites_v1';
 
 export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
- 
   const [favorites, setFavorites] = useState<number[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (!saved) return [];
       const parsed: unknown = JSON.parse(saved);
-      // Valid JSON is not necessarily the shape we stored: guard the array so a
-      // hand-edited or stale entry cannot crash every consumer of `favorites`.
+      // parsing cleanly says nothing about the shape - old formats and hand edits land here too
       if (!Array.isArray(parsed)) return [];
       return parsed.filter((id): id is number => typeof id === 'number');
     } catch (error) {
@@ -28,7 +26,6 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
   }, [favorites]);
 
-
   const toggleFavorite = useCallback((id: number) => {
     setFavorites(prev => 
       prev.includes(id) 
@@ -37,17 +34,7 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     );
   }, []);
 
-  
-  const isFavorite = useCallback((id: number) => {
-    return favorites.includes(id);
-  }, [favorites]);
-
- 
-  const value = useMemo(() => ({
-    favorites,
-    toggleFavorite,
-    isFavorite
-  }), [favorites, toggleFavorite, isFavorite]);
+  const value = useMemo(() => ({ favorites, toggleFavorite }), [favorites, toggleFavorite]);
 
   return (
     <FavoritesContext.Provider value={value}>

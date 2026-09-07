@@ -43,7 +43,7 @@ describe('Home', () => {
     get.mockReset();
   });
 
-  it('requests /users once and renders a card per author', async () => {
+  it('fetches /users and renders a card each', async () => {
     get.mockResolvedValue({ data: users });
 
     renderHome();
@@ -53,7 +53,7 @@ describe('Home', () => {
     expect(get).toHaveBeenCalledWith('/users');
   });
 
-  it('filters the list by author name', async () => {
+  it('filters by name', async () => {
     const person = userEvent.setup();
     get.mockResolvedValue({ data: users });
     renderHome();
@@ -65,7 +65,7 @@ describe('Home', () => {
     expect(screen.queryByText('Leanne Graham')).not.toBeInTheDocument();
   });
 
-  it('also filters by company name', async () => {
+  it('and by company', async () => {
     const person = userEvent.setup();
     get.mockResolvedValue({ data: users });
     renderHome();
@@ -77,7 +77,7 @@ describe('Home', () => {
     expect(screen.queryByText('Leanne Graham')).not.toBeInTheDocument();
   });
 
-  it('shows an empty state when nothing matches the query', async () => {
+  it('empty state quotes the query back', async () => {
     const person = userEvent.setup();
     get.mockResolvedValue({ data: users });
     renderHome();
@@ -88,7 +88,7 @@ describe('Home', () => {
     expect(screen.getByText(/"zzzz" ile eşleşen bir yazar bulunamadı\./)).toBeInTheDocument();
   });
 
-  it('shows a retry-able error state when the request fails', async () => {
+  it('error state offers a retry', async () => {
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
     get.mockRejectedValue(new Error('offline'));
 

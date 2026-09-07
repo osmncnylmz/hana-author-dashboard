@@ -7,7 +7,7 @@ const TITLE_PLACEHOLDER = 'Etkileyici bir başlık yazın...';
 const BODY_PLACEHOLDER = 'Neler hakkında yazmak istersiniz?';
 
 describe('PostForm', () => {
-  it('submits the title and body, then clears the fields', async () => {
+  it('submits, then clears both fields', async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn().mockResolvedValue(undefined);
     render(<PostForm onSubmit={onSubmit} />);
@@ -25,7 +25,7 @@ describe('PostForm', () => {
     expect(body).toHaveValue('');
   });
 
-  it('ignores a submit where either field is only whitespace', async () => {
+  it('will not submit a whitespace-only field', async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn().mockResolvedValue(undefined);
     render(<PostForm onSubmit={onSubmit} />);
@@ -59,7 +59,7 @@ describe('PostForm', () => {
     expect(await screen.findByRole('button', { name: /^Yayınla$/i })).toBeEnabled();
   });
 
-  it('recovers and re-enables the form when onSubmit rejects', async () => {
+  it('keeps the draft when onSubmit rejects', async () => {
     const user = userEvent.setup();
     const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
     const onSubmit = vi.fn().mockRejectedValue(new Error('network down'));
@@ -71,7 +71,6 @@ describe('PostForm', () => {
     await user.click(screen.getByRole('button', { name: /Yayınla/i }));
 
     expect(await screen.findByRole('button', { name: /^Yayınla$/i })).toBeEnabled();
-    // The draft is deliberately kept so the author does not lose their text.
     expect(title).toHaveValue('Başlık');
     expect(consoleError).toHaveBeenCalled();
     consoleError.mockRestore();

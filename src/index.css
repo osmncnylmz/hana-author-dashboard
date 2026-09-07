@@ -1,22 +1,7 @@
 @import "tailwindcss";
 
-@theme {
-  --color-brand-blue: #2563eb;
-  --color-brand-dark: #1e293b;
-}
-
 @layer base {
   body {
     @apply bg-slate-50 text-slate-900 antialiased;
   }
-}
-
-
-.author-card {
-  @apply bg-white border border-slate-200 rounded-3xl p-6 transition-all duration-300 hover:shadow-[0_20px_50px_rgba(8,_112,_184,_0.07)] hover:-translate-y-1;
-}
-
-
-.btn-primary {
-  @apply bg-blue-600 text-white px-6 py-3 rounded-2xl font-bold hover:bg-blue-700 transition-all active:scale-95 shadow-lg shadow-blue-200;
 }
