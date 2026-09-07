@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Star, User as UserIcon, Mail, Building2, ChevronRight } from 'lucide-react';
 import type { User } from '../types/index';
-import { useFavorites } from '../context/FavoritesContext';
+import { useFavorites } from '../context/favorites-context';
 
 export const UserCard = ({ user }: { user: User }) => {
   const { favorites, toggleFavorite } = useFavorites();

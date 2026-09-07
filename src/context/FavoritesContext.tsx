@@ -1,13 +1,5 @@
-import React, { createContext, useContext, useState, useEffect, useMemo, useCallback } from 'react';
-
-interface FavoritesContextType {
-  favorites: number[];
-  toggleFavorite: (id: number) => void;
-  isFavorite: (id: number) => boolean; 
-}
-
-const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
-
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import { FavoritesContext } from './favorites-context';
 
 const STORAGE_KEY = 'hana_author_favorites_v1';
 
@@ -16,7 +8,12 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [favorites, setFavorites] = useState<number[]>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      return saved ? JSON.parse(saved) : [];
+      if (!saved) return [];
+      const parsed: unknown = JSON.parse(saved);
+      // Valid JSON is not necessarily the shape we stored: guard the array so a
+      // hand-edited or stale entry cannot crash every consumer of `favorites`.
+      if (!Array.isArray(parsed)) return [];
+      return parsed.filter((id): id is number => typeof id === 'number');
     } catch (error) {
       console.error("LocalStorage okunurken hata oluştu:", error);
       return [];
@@ -57,12 +54,4 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       {children}
     </FavoritesContext.Provider>
   );
-};
-
-export const useFavorites = () => {
-  const context = useContext(FavoritesContext);
-  if (!context) {
-    throw new Error('useFavorites mutlaka FavoritesProvider içinde kullanılmalıdır!');
-  }
-  return context;
 };

@@ -25,6 +25,7 @@ export const UserDetail = () => {
         setUser(userRes.data);
         setPosts(postsRes.data);
       } catch (err) {
+        console.error("Yazar detayı yüklenirken hata oluştu:", err);
         setError("Veriler yüklenirken bir hata oluştu.");
       } finally {
         setLoading(false);
@@ -42,6 +43,7 @@ export const UserDetail = () => {
       setPosts([newPost, ...posts]);
       
     } catch (err) {
+      console.error("Post eklenirken hata oluştu:", err);
       alert("Post eklenemedi.");
     }
   };
